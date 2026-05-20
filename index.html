@@ -1,333 +1,276 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admisiones UMB - Universidad Mexiquense del Bicentenario</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --guinda: #691c32; 
-            --oro: #bc955c;   
-            --oro-dark: #a6834d;
-            --texto: #333;
-            --gris-linea: #ddd;
-            --gris-fondo: #f8f9fa;
-            --blanco: #ffffff;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMB · Confirmación de Admisión</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --azul:       #003087;
+      --azul-medio: #0056b3;
+      --azul-claro: #e8f0ff;
+      --verde:      #16a34a;
+      --verde-bg:   #dcfce7;
+      --rojo:       #dc2626;
+      --rojo-bg:    #fee2e2;
+      --amarillo:   #d97706;
+      --amarillo-bg:#fef3c7;
+      --gris:       #64748b;
+      --blanco:     #ffffff;
+      --fondo:      #f0f4f8;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            line-height: 1.6;
-            color: var(--texto);
-            background-color: var(--blanco);
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--fondo);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
 
-        /* HEADER */
-        header {
-            background: #fff;
-            padding: 0.6rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,86,179,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(0,48,135,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--blanco);
+      border-radius: 24px;
+      padding: 52px 44px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 8px 24px rgba(0,48,135,0.08),
+        0 32px 64px rgba(0,48,135,0.06);
+      animation: slideUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
 
-        .logo-umb {
-            height: 50px;
-            width: auto;
-        }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
 
-        .divider {
-            width: 1px;
-            height: 30px;
-            background-color: var(--gris-linea);
-        }
+    .logo-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      box-shadow: 0 6px 20px rgba(0,86,179,0.30);
+    }
+    .logo-wrap svg { width: 34px; height: 34px; fill: white; }
 
-        .university-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #444;
-            max-width: 200px;
-            line-height: 1.2;
-        }
+    #estado-cargando .spinner {
+      width: 52px; height: 52px;
+      border: 3px solid var(--azul-claro);
+      border-top-color: var(--azul-medio);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-        .nav-buttons { display: flex; gap: 12px; }
+    #estado-cargando p {
+      font-size: 15px;
+      color: var(--gris);
+      font-weight: 400;
+    }
 
-        .btn-nav {
-            padding: 0.6rem 1.4rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
+    .estado-resultado { display: none; animation: fadeIn 0.4s ease both; }
+    @keyframes fadeIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
 
-        .btn-pre { background: var(--guinda); color: white; border: 1px solid var(--guinda); }
-        .btn-pre:hover { background: #4d1425; transform: scale(1.05); }
+    .icono-resultado {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    .icono-resultado.verde  { background: var(--verde-bg);    }
+    .icono-resultado.rojo   { background: var(--rojo-bg);     }
+    .icono-resultado.amarillo{ background: var(--amarillo-bg);}
 
-        .btn-outline { border: 1px solid var(--guinda); color: var(--guinda); }
-        .btn-outline:hover { background: rgba(105, 28, 50, 0.05); }
+    h1.titulo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      color: #1e293b;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
 
-        /* HERO */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            padding: 0 20px;
-        }
+    p.subtitulo {
+      font-size: 15px;
+      color: var(--gris);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
 
-        .hero h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); margin-bottom: 1rem; font-weight: 700; }
-        .hero p { max-width: 750px; font-size: 1.1rem; opacity: 0.9; font-weight: 300; }
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .badge.verde   { background: var(--verde-bg);    color: var(--verde);   }
+    .badge.rojo    { background: var(--rojo-bg);     color: var(--rojo);    }
+    .badge.amarillo{ background: var(--amarillo-bg); color: var(--amarillo);}
+    .badge.gris    { background: #f1f5f9;            color: var(--gris);    }
 
-        /* FORMULARIO TRASLAPADO */
-        .overlap-container {
-            position: relative;
-            z-index: 10;
-            margin-top: -120px; 
-            display: flex;
-            justify-content: center;
-            padding: 0 20px;
-        }
+    .divider {
+      width: 40px; height: 3px;
+      border-radius: 2px;
+      margin: 20px auto;
+    }
+    .divider.verde   { background: var(--verde); }
+    .divider.rojo    { background: var(--rojo);  }
+    .divider.amarillo{ background: var(--amarillo); }
+    .divider.gris    { background: #cbd5e1; }
 
-        .form-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .form-card h2 {
-            color: var(--guinda);
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--oro);
-            padding-left: 15px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.9rem;
-            margin-bottom: 1.2rem;
-            border: 1px solid #e0e0e0;
-            background: #fdfdfd;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 0.95rem;
-        }
-
-        .btn-submit {
-            background: var(--oro);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: 0.3s;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-submit:hover { background: var(--oro-dark); transform: translateY(-2px); }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
-
-        /* SECCIÓN DE BENEFICIOS REIMAGINADA */
-        .benefits-section {
-            padding: 120px 5% 80px;
-            background-color: var(--gris-fondo);
-            text-align: center;
-            border-bottom: 12px solid var(--oro);
-        }
-
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .benefit-card {
-            background: var(--blanco);
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            transition: all 0.4s ease;
-            border-top: 5px solid var(--guinda);
-        }
-
-        .benefit-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-
-        .icon-circle {
-            width: 70px; height: 70px; background: #f0f0f0; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px; font-size: 1.8rem;
-        }
-
-        .benefit-card h3 { color: var(--guinda); margin-bottom: 15px; font-size: 1.3rem; }
-        .benefit-card p { color: #666; font-size: 0.95rem; line-height: 1.6; }
-
-        footer {
-            background: var(--guinda);
-            color: white;
-            text-align: center;
-            padding: 3rem 20px;
-        }
-
-        @media (max-width: 768px) {
-            .divider, .university-name { display: none; }
-            .hero { height: 420px; }
-            .overlap-container { margin-top: -80px; }
-            .benefits-section { padding-top: 100px; }
-        }
-    </style>
+    footer {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand">
-            <img src="https://raw.githubusercontent.com/ismaelumb/MAPA-UMB/refs/heads/main/Logotipo%20UMB%20-%20copia.png" alt="Logo UMB" class="logo-umb">
-            <div class="divider"></div>
-            <span class="university-name">Universidad Mexiquense del Bicentenario</span>
-        </div>
-        <div class="nav-buttons">
-            <a href="#registro" class="btn-nav btn-pre">Pre-registro</a>
-            <a href="#" class="btn-nav btn-outline">Trámites</a>
-        </div>
-    </header>
+<div class="card">
 
-    <main>
-        <section class="hero">
-            <h1>Tu futuro comienza hoy</h1>
-            <p>Educación pública de excelencia con 36 planteles estratégicos en el Estado de México. ¡Únete a la comunidad UMB!</p>
-        </section>
+  <div class="logo-wrap">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+    </svg>
+  </div>
 
-        <div class="overlap-container">
-            <div class="form-card" id="registro">
-                <h2>Solicita Información</h2>
-                <form id="umbForm">
-                    <input type="text" name="nombre" placeholder="Nombre completo" required>
-                    <input type="email" name="email" placeholder="Correo electrónico" required>
-                    <select name="area" required>
-                        <option value="">Selecciona tu carrera de interés</option>
-                        <optgroup label="Licenciaturas">
-                            <option value="Licenciatura en Administración">Licenciatura en Administración</option>
-                            <option value="Licenciatura en Administración (UESAAME)">Licenciatura en Administración (UESAAME)</option>
-                            <option value="Licenciatura en Arquitectura">Licenciatura en Arquitectura</option>
-                            <option value="Licenciatura en Contaduría">Licenciatura en Contaduría</option>
-                            <option value="Licenciatura en Derecho">Licenciatura en Derecho</option>
-                            <option value="Licenciatura en Derecho (UESAAME)">Licenciatura en Derecho (UESAAME)</option>
-                            <option value="Licenciatura en Enfermería">Licenciatura en Enfermería</option>
-                            <option value="Licenciatura en Gastronomía y Turismo Sustentable">Licenciatura en Gastronomía y Turismo Sustentable</option>
-                            <option value="Licenciatura en Informática">Licenciatura en Informática</option>
-                            <option value="Licenciatura en Informática Administrativa y Financiera">Licenciatura en Informática Administrativa y Financiera</option>
-                            <option value="Licenciatura en Nutrición">Licenciatura en Nutrición</option>
-                            <option value="Licenciatura en Psicología Industrial (UESAAME)">Licenciatura en Psicología Industrial (UESAAME)</option>
-                            <option value="Licenciatura en Psicología Industrial">Licenciatura en Psicología Industrial</option>
-                        </optgroup>
-                        <optgroup label="Ingenierías">
-                            <option value="Ingeniería Civil">Ingeniería Civil</option>
-                            <option value="Ingeniería Electromecánica">Ingeniería Electromecánica</option>
-                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
-                            <option value="Ingeniería Mecánica">Ingeniería Mecánica</option>
-                            <option value="Ingeniería Química">Ingeniería Química</option>
-                            <option value="Ingeniería en Gestión Empresarial">Ingeniería en Gestión Empresarial</option>
-                            <option value="Ingeniería en Innovación Agrícola Sustentable">Ingeniería en Innovación Agrícola Sustentable</option>
-                            <option value="Ingeniería en Innovación Alimenticia">Ingeniería en Innovación Alimenticia</option>
-                            <option value="Ingeniería en Logística y Distribución">Ingeniería en Logística y Distribución</option>
-                            <option value="Ingeniería en Mecánica Automotriz">Ingeniería en Mecánica Automotriz</option>
-                            <option value="Ingeniería en Plásticos">Ingeniería en Plásticos</option>
-                            <option value="Ingeniería en Sistemas Computacionales">Ingeniería en Sistemas Computacionales</option>
-                            <option value="Ingeniería en Tecnologías de la Información y Comunicación">Ingeniería en Tecnologías de la Información y Comunicación</option>
-                        </optgroup>
-                    </select>
-                    <button type="submit" class="btn-submit" id="submitBtn">Enviar Solicitud</button>
-                </form>
-                <div id="mensajeExito" style="display:none; color: #2e7d32; margin-top: 15px; font-weight: 600; text-align: center;">✓ ¡Información registrada con éxito!</div>
-            </div>
-        </div>
+  <div id="estado-cargando">
+    <div class="spinner"></div>
+    <p>Procesando tu respuesta…</p>
+  </div>
 
-        <section class="benefits-section">
-            <div class="benefits-grid">
-                <article class="benefit-card">
-                    <div class="icon-circle">📍</div>
-                    <h3>36 Planteles</h3>
-                    <p>Presencia estratégica en municipios clave del Estado de México para que estudies cerca de tu hogar y reduzcas traslados.</p>
-                </article>
+  <div id="estado-acepto" class="estado-resultado">
+    <div class="icono-resultado verde">🎉</div>
+    <h1 class="titulo">¡Lugar confirmado!</h1>
+    <p class="subtitulo">Has aceptado el lugar de manera exitosa. Pronto recibirás un correo con los próximos pasos para tu inscripción.</p>
+    <span class="badge verde">✓ Respuesta registrada</span>
+    <div class="divider verde"></div>
+  </div>
 
-                <article class="benefit-card">
-                    <div class="icon-circle">🎓</div>
-                    <h3>31 Carreras</h3>
-                    <p>Nuestra oferta académica está diseñada para cubrir las demandas reales del sector industrial y tecnológico actual.</p>
-                </article>
+  <div id="estado-rechazo" class="estado-resultado">
+    <div class="icono-resultado rojo">👋</div>
+    <h1 class="titulo">Respuesta registrada</h1>
+    <p class="subtitulo">Hemos registrado tu declinación. Gracias por tu tiempo y te deseamos mucho éxito en tus futuros proyectos.</p>
+    <span class="badge rojo">Oferta declinada</span>
+    <div class="divider rojo"></div>
+  </div>
 
-                <article class="benefit-card">
-                    <div class="icon-circle">💳</div>
-                    <h3>Becas UMB</h3>
-                    <p>Apoyamos tu talento con programas de becas internas y externas para que tu única preocupación sea aprender y crecer.</p>
-                </article>
-            </div>
-        </section>
-    </main>
+  <div id="estado-ya-respondio" class="estado-resultado">
+    <div class="icono-resultado amarillo">⚠️</div>
+    <h1 class="titulo">Ya registramos tu respuesta</h1>
+    <p class="subtitulo">No es posible modificar tu decisión. Si crees que hay un error, contáctanos por WhatsApp.</p>
+    <span class="badge amarillo">Respuesta previa detectada</span>
+    <div class="divider amarillo"></div>
+  </div>
 
-    <footer>
-        <p><strong>Universidad Mexiquense del Bicentenario</strong></p>
-        <p>Gobierno del Estado de México</p>
-        <p>Atención: 55 98 13 66 92 | 55 98 13 66 93 <a href="mailto:convocatoria@umb.mx">convocatoria@umb.mx</a></p>
-        <p style="margin-top: 15px; font-size: 0.75rem; opacity: 0.6;">© 2026 Todos los derechos reservados.</p>
-    </footer>
+  <div id="estado-expirado" class="estado-resultado">
+    <div class="icono-resultado rojo">⏱️</div>
+    <h1 class="titulo">Oferta expirada</h1>
+    <p class="subtitulo">El periodo de 72 horas para responder ha concluido. Comunícate con nosotros si aún estás interesado.</p>
+    <span class="badge rojo">Plazo vencido</span>
+    <div class="divider rojo"></div>
+  </div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwuQvzQdUZ5kc-7U2Uop9kDfYSWe0oN22xP_nBjstqRXGg3_onzmSV2sQVPafA28lKm6A/exec';
-        const form = document.getElementById('umbForm');
-        const btn = document.getElementById('submitBtn');
-        const msg = document.getElementById('mensajeExito');
+  <div id="estado-error" class="estado-resultado">
+    <div class="icono-resultado amarillo">❌</div>
+    <h1 class="titulo">Enlace no válido</h1>
+    <p class="subtitulo">El enlace que usaste es incompleto o incorrecto. Verifica que hayas abierto el enlace completo desde el correo.</p>
+    <span class="badge gris">Error de enlace</span>
+    <div class="divider gris"></div>
+  </div>
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            btn.disabled = true;
-            btn.innerText = 'PROCESANDO...';
+  <footer>
+    <strong>Universidad Mundo Mejor</strong><br>
+    Admisiones · <a href="https://wa.me/7202035562" style="color:#0056b3;text-decoration:none;">💬 WhatsApp</a>
+    &nbsp;|&nbsp; 55 9813 6693 / 55 9813 6692<br>
+    Ya puedes cerrar esta pestaña.
+  </footer>
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .then(response => {
-                    btn.disabled = false;
-                    btn.innerText = 'ENVIAR SOLICITUD';
-                    msg.style.display = 'block';
-                    form.reset();
-                    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    btn.disabled = false;
-                    btn.innerText = 'REINTENTAR ENVÍO';
-                    alert('Error de conexión. Por favor, intenta de nuevo.');
-                });
-        });
-    </script>
+</div>
+
+<script>
+  // ─── CONFIGURACIÓN ────────────────────────────────────────────
+  // ⚠️ REEMPLAZA ESTO CON LA URL DE TU WEB APP DE APPS SCRIPT
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec";
+  // ──────────────────────────────────────────────────────────────
+
+  function mostrar(id) {
+    document.querySelectorAll('.estado-resultado, #estado-cargando')
+      .forEach(el => el.style.display = 'none');
+    const el = document.getElementById(id);
+    if (el) { el.style.display = 'block'; }
+  }
+
+  async function procesarRespuesta() {
+    const params  = new URLSearchParams(window.location.search);
+    const token   = params.get('token');
+    const accion  = params.get('accion');
+
+    if (!token || !accion || !['ACEPTAR', 'RECHAZAR'].includes(accion)) {
+      mostrar('estado-error');
+      return;
+    }
+
+    mostrar('estado-cargando');
+
+    try {
+      const url = `${APPS_SCRIPT_URL}?token=${encodeURIComponent(token)}&accion=${encodeURIComponent(accion)}`;
+      
+      // Google Apps Script maneja redirecciones automáticas por seguridad, usamos redirect: 'follow'
+      const res  = await fetch(url, { redirect: 'follow' });
+      const data = await res.json();
+
+      switch (data.resultado) {
+        case 'ACEPTADO':       mostrar('estado-acepto');        break;
+        case 'RECHAZADO':      mostrar('estado-rechazo');       break;
+        case 'YA_RESPONDIO':   mostrar('estado-ya-respondio');  break;
+        case 'EXPIRADO':       mostrar('estado-expirado');      break;
+        default:               mostrar('estado-error');
+      }
+    } catch (err) {
+      console.error('Error al contactar el servidor:', err);
+      mostrar('estado-error');
+    }
+  }
+
+  procesarRespuesta();
+</script>
+
 </body>
 </html>
