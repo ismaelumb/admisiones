@@ -208,8 +208,8 @@
   </div>
 
   <div id="estado-not-found" class="estado-resultado">
-    <div class="icono-resultado rojo" style="color: var(--rojo); background: var(--rojo-bg);">❌</div>
-    <h1 class="titulo" style="color: var(--rojo);">Usuario no encontrado</h1>
+    <div class="icono-resultado rojo">❌</div>
+    <h1 class="titulo">Usuario no encontrado</h1>
     <p class="subtitulo">No localizamos tu registro en el sistema. Verifica el enlace.</p>
     <span class="badge rojo">No localizado</span>
     <div class="divider rojo"></div>
@@ -267,7 +267,7 @@
         case 'RECHAZADO':      mostrar('estado-rechazo');       break;
         case 'YA_RESPONDIO':   mostrar('estado-ya-respondio');  break;
         case 'EXPIRADO':       mostrar('estado-expirado');      break;
-        case 'NOT_FOUND':      mostrar('estado-not-found');     break; // <-- Vinculado aquí
+        case 'NOT_FOUND':      mostrar('estado-not-found');     break;
         default:               mostrar('estado-error');
       }
     } catch (err) {
