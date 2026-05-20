@@ -207,8 +207,16 @@
     <div class="divider rojo"></div>
   </div>
 
+  <div id="estado-not-found" class="estado-resultado">
+    <div class="icono-resultado rojo" style="color: var(--rojo); background: var(--rojo-bg);">❌</div>
+    <h1 class="titulo" style="color: var(--rojo);">Usuario no encontrado</h1>
+    <p class="subtitulo">No localizamos tu registro en el sistema. Verifica el enlace.</p>
+    <span class="badge rojo">No localizado</span>
+    <div class="divider rojo"></div>
+  </div>
+
   <div id="estado-error" class="estado-resultado">
-    <div class="icono-resultado amarillo">❌</div>
+    <div class="icono-resultado amarillo">⚠️</div>
     <h1 class="titulo">Enlace no válido</h1>
     <p class="subtitulo">El enlace que usaste es incompleto o incorrecto. Verifica que hayas abierto el enlace completo desde el correo.</p>
     <span class="badge gris">Error de enlace</span>
@@ -227,7 +235,7 @@
 <script>
   // ─── CONFIGURACIÓN ────────────────────────────────────────────
   // ⚠️ REEMPLAZA ESTO CON LA URL DE TU WEB APP DE APPS SCRIPT
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0u3NS9aE0zEc-T5NX78B_RC-Rtkl3WsgC-xRlf0nybemK4Y-5JT8prm8cRsKA7niF/exec";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec";
   // ──────────────────────────────────────────────────────────────
 
   function mostrar(id) {
@@ -251,8 +259,6 @@
 
     try {
       const url = `${APPS_SCRIPT_URL}?token=${encodeURIComponent(token)}&accion=${encodeURIComponent(accion)}`;
-      
-      // Google Apps Script maneja redirecciones automáticas por seguridad, usamos redirect: 'follow'
       const res  = await fetch(url, { redirect: 'follow' });
       const data = await res.json();
 
@@ -261,6 +267,7 @@
         case 'RECHAZADO':      mostrar('estado-rechazo');       break;
         case 'YA_RESPONDIO':   mostrar('estado-ya-respondio');  break;
         case 'EXPIRADO':       mostrar('estado-expirado');      break;
+        case 'NOT_FOUND':      mostrar('estado-not-found');     break; // <-- Vinculado aquí
         default:               mostrar('estado-error');
       }
     } catch (err) {
