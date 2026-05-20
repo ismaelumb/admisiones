@@ -172,44 +172,44 @@
 
   <div id="estado-cargando">
     <div class="spinner"></div>
-    <p>Procesando tu respuesta…</p>
+    <p>Validando credenciales en el sistema…</p>
   </div>
 
   <div id="estado-acepto" class="estado-resultado">
     <div class="icono-resultado verde">🎉</div>
     <h1 class="titulo">¡Lugar confirmado!</h1>
-    <p class="subtitulo">Has aceptado el lugar de manera exitosa. Pronto recibirás un correo con los próximos pasos para tu inscripción.</p>
-    <span class="badge verde">✓ Respuesta registrada</span>
+    <p class="subtitulo">Has aceptado la oferta de ingreso de manera exitosa. Pronto recibirás un correo automatizado con la documentación de inscripción.</p>
+    <span class="badge verde">✓ Decisión Guardada</span>
     <div class="divider verde"></div>
   </div>
 
   <div id="estado-rechazo" class="estado-resultado">
     <div class="icono-resultado rojo">👋</div>
     <h1 class="titulo">Respuesta registrada</h1>
-    <p class="subtitulo">Hemos registrado tu declinación. Gracias por tu tiempo y te deseamos mucho éxito en tus futuros proyectos.</p>
+    <p class="subtitulo">Hemos procesado tu declinación de cupo. Te deseamos el mayor de los éxitos en tu futuro profesional.</p>
     <span class="badge rojo">Oferta declinada</span>
     <div class="divider rojo"></div>
   </div>
 
   <div id="estado-ya-respondio" class="estado-resultado">
     <div class="icono-resultado amarillo">⚠️</div>
-    <h1 class="titulo">Ya registramos tu respuesta</h1>
-    <p class="subtitulo">No es posible modificar tu decisión. Si crees que hay un error, contáctanos por WhatsApp.</p>
-    <span class="badge amarillo">Respuesta previa detectada</span>
+    <h1 class="titulo">Respuesta ya existente</h1>
+    <p class="subtitulo">Previamente capturamos tu decisión en este enlace. No es posible editar la respuesta de forma manual.</p>
+    <span class="badge amarillo">Registro bloqueado</span>
     <div class="divider amarillo"></div>
   </div>
 
   <div id="estado-expirado" class="estado-resultado">
     <div class="icono-resultado rojo">⏱️</div>
-    <h1 class="titulo">Oferta expirada</h1>
-    <p class="subtitulo">El periodo de 72 horas para responder ha concluido. Comunícate con nosotros si aún estás interesado.</p>
+    <h1 class="titulo">Enlace Expirado</h1>
+    <p class="subtitulo">El período reglamentario de 72 horas para responder ha vencido. Por favor ponte en contacto inmediato con Control Escolar.</p>
     <span class="badge rojo">Plazo vencido</span>
     <div class="divider rojo"></div>
   </div>
 
   <div id="estado-not-found" class="estado-resultado">
-    <div class="icono-resultado rojo">❌</div>
-    <h1 class="titulo">Usuario no encontrado</h1>
+    <div class="icono-resultado rojo" style="color: var(--rojo); background: var(--rojo-bg);">❌</div>
+    <h1 class="titulo" style="color: var(--rojo);">Usuario no encontrado</h1>
     <p class="subtitulo">No localizamos tu registro en el sistema. Verifica el enlace.</p>
     <span class="badge rojo">No localizado</span>
     <div class="divider rojo"></div>
@@ -217,38 +217,38 @@
 
   <div id="estado-error" class="estado-resultado">
     <div class="icono-resultado amarillo">⚠️</div>
-    <h1 class="titulo">Enlace no válido</h1>
-    <p class="subtitulo">El enlace que usaste es incompleto o incorrecto. Verifica que hayas abierto el enlace completo desde el correo.</p>
+    <h1 class="titulo">Enlace corrupto</h1>
+    <p class="subtitulo">Los parámetros de verificación están incompletos. Intente abrir el link entero desde su buzón de correo.</p>
     <span class="badge gris">Error de enlace</span>
     <div class="divider gris"></div>
   </div>
 
   <footer>
     <strong>Universidad Mundo Mejor</strong><br>
-    Admisiones · <a href="https://wa.me/7202035562" style="color:#0056b3;text-decoration:none;">💬 WhatsApp</a>
-    &nbsp;|&nbsp; 55 9813 6693 / 55 9813 6692<br>
-    Ya puedes cerrar esta pestaña.
+    Admisiones · <a href="https://wa.me/527202035562" style="color:#0056b3;text-decoration:none;font-weight:500;">💬 WhatsApp</a><br>
+    <span style="color: #64748b; display: inline-block; margin-top: 4px;">O llámanos: 55 9813 6693 / 55 9813 6692</span><br>
+    <div style="margin-top: 12px; font-size: 11px; color: #cbd5e1;">Ya puedes cerrar esta pestaña.</div>
   </footer>
 
 </div>
 
 <script>
-  // ─── CONFIGURACIÓN ────────────────────────────────────────────
-  // ⚠️ REEMPLAZA ESTO CON LA URL DE TU WEB APP DE APPS SCRIPT
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRiB7gHcY4gdvD2c5VBE23o-UCKQjNf-4EYcVr7qFi7eScXqEuV2y6Q0zFmCcka7HN/exec";
+  // ─── LINK DE ENLACE DIRECTO AL BACKEND ────────────────────────
+  // ⚠️ REEMPLAZA EL TEXTO "TU_DEPLOYMENT_ID" CON TU ID DE IMPLEMENTACIÓN DE APPS SCRIPT
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID/exec";
   // ──────────────────────────────────────────────────────────────
 
   function mostrar(id) {
     document.querySelectorAll('.estado-resultado, #estado-cargando')
       .forEach(el => el.style.display = 'none');
-    const el = document.getElementById(id);
-    if (el) { el.style.display = 'block'; }
+    const elemento = document.getElementById(id);
+    if (elemento) { elemento.style.display = 'block'; }
   }
 
   async function procesarRespuesta() {
-    const params  = new URLSearchParams(window.location.search);
-    const token   = params.get('token');
-    const accion  = params.get('accion');
+    const params = new URLSearchParams(window.location.search);
+    const token  = params.get('token');
+    const accion = params.get('accion');
 
     if (!token || !accion || !['ACEPTAR', 'RECHAZAR'].includes(accion)) {
       mostrar('estado-error');
@@ -258,7 +258,7 @@
     mostrar('estado-cargando');
 
     try {
-      const url = `${APPS_SCRIPT_URL}?token=${encodeURIComponent(token)}&accion=${encodeURIComponent(accion)}`;
+      const url  = `${APPS_SCRIPT_URL}?token=${encodeURIComponent(token)}&accion=${encodeURIComponent(accion)}`;
       const res  = await fetch(url, { redirect: 'follow' });
       const data = await res.json();
 
@@ -271,7 +271,7 @@
         default:               mostrar('estado-error');
       }
     } catch (err) {
-      console.error('Error al contactar el servidor:', err);
+      console.error('Error de comunicación con API:', err);
       mostrar('estado-error');
     }
   }
