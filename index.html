@@ -177,7 +177,7 @@
 
   <div id="estado-acepto" class="estado-resultado">
     <div class="icono-resultado verde">🎉</div>
-    <h1 class="titulo">¡Lugar confirmado!</h1>
+    <h1 class="titulo">¡Lugar confirmed!</h1>
     <p class="subtitulo">Has aceptado la oferta de ingreso de manera exitosa. Pronto recibirás un correo automatizado con la documentación de inscripción.</p>
     <span class="badge verde">✓ Decisión Guardada</span>
     <div class="divider verde"></div>
@@ -218,7 +218,7 @@
   <div id="estado-error" class="estado-resultado">
     <div class="icono-resultado amarillo">⚠️</div>
     <h1 class="titulo">Enlace corrupto</h1>
-    <p class="subtitulo">Los parámetros de verificación están incompletos. Intente abrir el link entero desde su buzón de correo.</p>
+    <p class="subtitulo">Los parámetros de verificación están incompletos o son incorrectos. Intente abrir el link entero desde su buzón de correo.</p>
     <span class="badge gris">Error de enlace</span>
     <div class="divider gris"></div>
   </div>
@@ -234,8 +234,7 @@
 
 <script>
   // ─── LINK DE ENLACE DIRECTO AL BACKEND ────────────────────────
-  // ⚠️ REEMPLAZA EL TEXTO "TU_DEPLOYMENT_ID" CON TU ID DE IMPLEMENTACIÓN DE APPS SCRIPT
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRJBM5qsx7SFJYQv7R6gBmCmOfXpy4kiv3lmvo61Rogn8ZOJ0f7gNIalGch1o0iAJf/exec";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrUBT3akbEA8__11b-Gsv7csOFT4hrlnA6wQGix6A5lZzG6pIxCRsqktli7pZBP74w/exec";
   // ──────────────────────────────────────────────────────────────
 
   function mostrar(id) {
@@ -248,7 +247,10 @@
   async function procesarRespuesta() {
     const params = new URLSearchParams(window.location.search);
     const token  = params.get('token');
-    const accion = params.get('accion');
+    
+    // 🛡️ Actualización: Tolerancia a minúsculas/mayúsculas desde la URL del correo
+    const accionRaw = params.get('accion');
+    const accion    = accionRaw ? accionRaw.toUpperCase().trim() : null;
 
     if (!token || !accion || !['ACEPTAR', 'RECHAZAR'].includes(accion)) {
       mostrar('estado-error');
